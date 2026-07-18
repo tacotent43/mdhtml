@@ -1,0 +1,17 @@
+BlockNode
+[x] Document
+[] Heading
+[] Paragraph
+[] CodeBlock
+[] List
+[] ListItem
+
+InlineNode
+[] Text
+[] Emphasis
+[] Strong
+[] CodeSpan
+
+Tabulation is POST-PROCESSING and there is no real need to feed integer to std::string toHtml() method.
+
+1. Heading.h - merging previous children nodes may cause unexpected behaviour due to errors in spacing logic. Recheck
