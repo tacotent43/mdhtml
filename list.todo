@@ -1,9 +1,9 @@
 BlockNode
 [x] Document
-[] Heading
-[] Paragraph
-[] CodeBlock
-[] List
+[x] Heading
+[x] Paragraph
+[x] CodeBlock - needs more flexibility, such as custom spans (if keyword) etc.
+[] List - needs support for ul/ol
 [] ListItem
 
 InlineNode

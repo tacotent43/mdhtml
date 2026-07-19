@@ -9,12 +9,10 @@ std::string dyna_print(std::string_view rt_fmt_str, Args&&... args) {
 }
 
 int main() {
-    std::cout << std::format("Hello {}!\n", "world");
-
     std::string fmt;
-    for (int i{}; i != 3; ++i) {
-        fmt += "{} ";
-        std::cout << dyna_print(fmt, "alpha", 'Z', 3.14, "unused");
-        std::cout << '\n';
-    }
+
+    fmt = "<h{}>";
+    std::cout << dyna_print(fmt, 2);
+
+    return 0;
 }

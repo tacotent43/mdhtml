@@ -4,18 +4,18 @@
 #include "ast/InlineNode/InlineNode.h"
 #include "utils/NodeConcatenation.h"
 
-struct Paragraph : public BlockNode {
+struct CodeBlock : public BlockNode {
     std::vector<std::unique_ptr<InlineNode>> children;
 
     std::string toHtml() const override {
         std::string html;
-        
-        html.append("<p>\n");
+
+        html.append("<pre data-lang=\"cpp\"><code>");
         html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
-        html.append("</p>\n");
+        html.append("</code></pre>\n");
 
         return html;
     }
 
-    ~Paragraph() override = default;
+    ~CodeBlock() override = default;
 };

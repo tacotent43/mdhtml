@@ -9,12 +9,12 @@ struct Heading : public BlockNode {
     int depth = 1; // numeration starts from one
     std::vector<std::unique_ptr<InlineNode>> children;
 
-    std::string toHtml() override {
+    std::string toHtml() const override {
         std::string html;
 
         html.append(getFormattedString("<h{}>", depth));
         html.append(NodeConcatenation::mergePreviousChildrenNodes(children));
-        html.append(getFormattedString("</h{}>"));
+        html.append(getFormattedString("</h{}>\n"));
 
         return html;
     }

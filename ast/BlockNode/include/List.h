@@ -1,21 +1,22 @@
 #pragma once
 
 #include "ast/BlockNode/BlockNode.h"
-#include "ast/InlineNode/InlineNode.h"
+#include "ast/BlockNode/ListItem.h"
 #include "utils/NodeConcatenation.h"
 
-struct Paragraph : public BlockNode {
-    std::vector<std::unique_ptr<InlineNode>> children;
+struct List : public BlockNode {
+    std::vector<std::unique_ptr<ListItem>> children;
 
     std::string toHtml() const override {
         std::string html;
-        
-        html.append("<p>\n");
+
+        // TODO: add full support for ul / ol
+        html.append("<ul>\n");
         html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
-        html.append("</p>\n");
+        html.append("</ul>\n");
 
         return html;
     }
 
-    ~Paragraph() override = default;
+    ~List() override = default;
 };

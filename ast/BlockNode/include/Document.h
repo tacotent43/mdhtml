@@ -6,7 +6,7 @@
 struct Document : public BlockNode {
     std::vector<std::unique_ptr<BlockNode>> children;
 
-    std::string toHtml() override {
+    std::string toHtml() const override {
         std::string html;
 
         html.append("<body>\n");

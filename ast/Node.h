@@ -5,7 +5,7 @@
 #include <string>
 
 struct Node {
-    virtual std::string toHtml();
+    virtual std::string toHtml() const;
 
     virtual ~Node() = default;
 };
