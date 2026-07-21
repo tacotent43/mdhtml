@@ -2,22 +2,16 @@
 
 #include "ast/BlockNode/BlockNode.h"
 #include "ast/InlineNode/InlineNode.h"
-#include "utils/NodeConcatenation.h"
-#include "utils/FormatString.h"
+#include "utils/include/NodeConcatenation.h"
+#include "utils/include/FormatString.h"
 
-struct Heading : public BlockNode {
-    int depth = 1; // numeration starts from one
-    std::vector<std::unique_ptr<InlineNode>> children;
+namespace ast::BlockNode {
+    struct Heading : public BlockNode {
+        int depth = 1; // numeration starts from one
+        std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
-    std::string toHtml() const override {
-        std::string html;
+        std::string Heading::toHtml() const override;
 
-        html.append(getFormattedString("<h{}>", depth));
-        html.append(NodeConcatenation::mergePreviousChildrenNodes(children));
-        html.append(getFormattedString("</h{}>\n"));
-
-        return html;
-    }
-
-    ~Heading() override = default;
-};
+        ~Heading() override = default;
+    };
+}

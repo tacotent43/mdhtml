@@ -2,20 +2,14 @@
 
 #include "ast/BlockNode/BlockNode.h"
 #include "ast/InlineNode/InlineNode.h"
-#include "utils/NodeConcatenation.h"
+#include "utils/include/NodeConcatenation.h"
 
-struct CodeBlock : public BlockNode {
-    std::vector<std::unique_ptr<InlineNode>> children;
+namespace ast::BlockNode {
+    struct CodeBlock : public BlockNode {
+        std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
-    std::string toHtml() const override {
-        std::string html;
+        std::string toHtml() const override;
 
-        html.append("<pre data-lang=\"cpp\"><code>");
-        html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
-        html.append("</code></pre>\n");
-
-        return html;
-    }
-
-    ~CodeBlock() override = default;
-};
+        ~CodeBlock() override = default;
+    };
+}

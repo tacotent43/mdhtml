@@ -1,20 +1,14 @@
 #pragma once
 
 #include "ast/BlockNode/BlockNode.h"
-#include "utils/NodeConcatenation.h"
+#include "utils/include/NodeConcatenation.h"
 
-struct Document : public BlockNode {
-    std::vector<std::unique_ptr<BlockNode>> children;
+namespace ast::BlockNode {
+    struct Document : public BlockNode {
+        std::vector<std::unique_ptr<BlockNode>> children;
 
-    std::string toHtml() const override {
-        std::string html;
+        std::string toHtml() const override;
 
-        html.append("<body>\n");
-        html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
-        html.append("</body>\n");
-
-        return html;
-    }
-
-    ~Document() override = default;
-};
+        ~Document() override = default;
+    };
+}

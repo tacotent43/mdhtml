@@ -3,14 +3,16 @@ BlockNode
 [x] Heading
 [x] Paragraph
 [x] CodeBlock - needs more flexibility, such as custom spans (if keyword) etc.
-[] List - needs support for ul/ol
-[] ListItem
+[x] List - needs support for ul/ol
+[x] ListItem
 
 InlineNode
 [] Text
-[] Emphasis
-[] Strong
-[] CodeSpan
+[] Bold
+[] Italic
+[] Code
+[] Link
+
 
 Tabulation is POST-PROCESSING and there is no real need to feed integer to std::string toHtml() method.
 

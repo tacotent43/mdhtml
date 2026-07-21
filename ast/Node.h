@@ -4,8 +4,10 @@
 #include <memory>
 #include <string>
 
-struct Node {
-    virtual std::string toHtml() const;
+namespace ast {
+    struct Node {
+        virtual std::string toHtml() const;
 
-    virtual ~Node() = default;
-};
+        virtual ~Node() = default;
+    };
+}

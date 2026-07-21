@@ -2,20 +2,14 @@
 
 #include "ast/BlockNode/BlockNode.h"
 #include "ast/InlineNode/InlineNode.h"
-#include "utils/NodeConcatenation.h"
+#include "utils/include/NodeConcatenation.h"
 
-struct Paragraph : public BlockNode {
-    std::vector<std::unique_ptr<InlineNode>> children;
+namespace ast::BlockNode {
+    struct Paragraph : public BlockNode {
+        std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
-    std::string toHtml() const override {
-        std::string html;
-        
-        html.append("<p>\n");
-        html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
-        html.append("</p>\n");
+        std::string toHtml() const override;
 
-        return html;
-    }
-
-    ~Paragraph() override = default;
-};
+        ~Paragraph() override = default;
+    };
+}

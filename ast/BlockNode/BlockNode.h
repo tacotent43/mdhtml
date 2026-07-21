@@ -2,4 +2,6 @@
 
 #include "ast/Node.h"
 
-struct BlockNode : public Node {};
+namespace ast::BlockNode {
+    struct BlockNode : public Node {};
+}
