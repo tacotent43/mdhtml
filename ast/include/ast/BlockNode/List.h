@@ -1,8 +1,7 @@
 #pragma once
 
-#include "ast/BlockNode/BlockNode.h"
-#include "ast/BlockNode/include/ListItem.h"
-#include "utils/include/NodeConcatenation.h"
+#include <ast/BlockNode/_BlockNode.h>
+#include <ast/BlockNode/ListItem.h>
 
 namespace ast::BlockNode {
     struct List : public BlockNode {

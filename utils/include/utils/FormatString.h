@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 
-namespace FormatString {
+namespace Utils {
     template<typename... Args>
     inline std::string getFormattedString(std::string_view rt_fmt_str, Args&&... args) {
         // gets format string and replaces "{} " with data of any type.

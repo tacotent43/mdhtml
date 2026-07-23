@@ -1,4 +1,4 @@
-#include "ast/BlockNode/include/List.h"
+#include <ast/BlockNode/List.h>
 
 namespace ast::BlockNode {
     std::string List::toHtml() const {
@@ -6,7 +6,7 @@ namespace ast::BlockNode {
 
         // TODO: add full support for ul / ol
         html.append("<ul>\n");
-        html.append(NodeConcatenation::mergePreviousChildrenNodes(this->children));
+        html.append(mergePreviousChildrenNodes(this->children));
         html.append("</ul>\n");
 
         return html;

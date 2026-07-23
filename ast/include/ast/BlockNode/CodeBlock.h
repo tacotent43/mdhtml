@@ -1,11 +1,12 @@
 #pragma once
 
-#include "ast/BlockNode/BlockNode.h"
-#include "ast/InlineNode/InlineNode.h"
-#include "utils/include/NodeConcatenation.h"
+#include <ast/BlockNode/_BlockNode.h>
+#include <ast/InlineNode/_InlineNode.h>
+#include <utils/FormatString.h>
 
 namespace ast::BlockNode {
     struct CodeBlock : public BlockNode {
+        std::string lang;
         std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
         std::string toHtml() const override;

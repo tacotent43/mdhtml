@@ -6,7 +6,7 @@
 
 namespace ast {
     struct Node {
-        virtual std::string toHtml() const;
+        virtual std::string toHtml() const = 0;
 
         virtual ~Node() = default;
     };

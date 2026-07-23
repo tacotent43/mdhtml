@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast/InlineNode/_InlineNode.h"
+#include <ast/InlineNode/_InlineNode.h>
 
 namespace ast::InlineNode {
     struct InlineCode : public InlineNode {
