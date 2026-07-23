@@ -1,5 +1,4 @@
-file(GLOB SOURCES_BLOCKNODE "BlockNode/source/*.cpp")
-file(GLOB SOURCES_INLINENODE "InlineNode/source/*.cpp")
+file(GLOB_RECURSE ast ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(
     ast STATIC 
