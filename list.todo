@@ -1,4 +1,4 @@
-BlockNode
+BlockNode: 
 [x] Document
 [x] Heading
 [x] Paragraph
@@ -6,14 +6,9 @@ BlockNode
 [x] List - needs support for ul/ol
 [x] ListItem
 
-InlineNode
-[] Text
-[] Bold
-[] Italic
-[] Code
-[] Link
-
-
-Tabulation is POST-PROCESSING and there is no real need to feed integer to std::string toHtml() method.
-
-1. Heading.h - merging previous children nodes may cause unexpected behaviour due to errors in spacing logic. Recheck
+InlineNode:
+[x] Text
+[x] Bold
+[x] Italic
+[x] Code
+[x] Link

@@ -6,7 +6,7 @@ namespace ast::BlockNode {
 
         html.append(Utils::getFormattedString("<h{}>", this->depth));
         html.append(mergePreviousChildrenNodes(this->children));
-        html.append(Utils::getFormattedString("</h{}>\n"));
+        html.append(Utils::getFormattedString("</h{}>\n", this->depth));
 
         return html;
     }

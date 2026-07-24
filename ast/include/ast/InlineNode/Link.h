@@ -8,6 +8,8 @@ namespace ast::InlineNode {
         std::string link;
         std::vector<std::unique_ptr<InlineNode>> children;
 
+        Link(std::vector<std::unique_ptr<InlineNode>> children, std::string link) : link(std::move(link)), children(std::move(children)) {}
+
         std::string toHtml() const override;
 
         ~Link() override = default;

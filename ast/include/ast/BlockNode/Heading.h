@@ -9,6 +9,8 @@ namespace ast::BlockNode {
         int depth = 1; // numeration starts from one
         std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
+        Heading(std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children, int depth) : depth(depth), children(std::move(children)) {}
+
         std::string toHtml() const override;
 
         ~Heading() override = default;

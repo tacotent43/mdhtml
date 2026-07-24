@@ -9,6 +9,8 @@ namespace ast::BlockNode {
         std::string lang;
         std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
+        CodeBlock(std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children, std::string lang) : lang(std::move(lang)), children(std::move(children)) {}
+
         std::string toHtml() const override;
 
         ~CodeBlock() override = default;
