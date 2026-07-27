@@ -1,4 +1,4 @@
-#include <lexer/Token.h>
+#include <lexer/Position.h>
 
 void Position::nextSymbol() {
     this->symbol += 1;
