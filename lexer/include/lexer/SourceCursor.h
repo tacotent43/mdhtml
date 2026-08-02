@@ -27,6 +27,8 @@ private:
     SourceCursor operator++(int);
 
 public:
+    std::string peekNextN(size_t N);
+
     char peek() const;
     char peek(size_t offset) const;
 

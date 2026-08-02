@@ -15,9 +15,18 @@ Token Lexer::nextToken() {
 
     if (this->mode == LexerMode::raw) {
         Token codeblock;
-        while (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
-            codeblock.value.push_back(this->source.peek());
+        
+        // hard-coded value
+        while (!(this->source.peekNextN(3) == "```" && this->source.atLineStart)) {
+            try {
+                codeblock.value.push_back(this->source.next());
+            } catch (const std::exception &e) {
+                // throw something here
+                // throw std::
+            }
         }
+
+        return codeblock;
     }
 
     if (this->source.atLineStart) {
