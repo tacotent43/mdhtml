@@ -5,7 +5,6 @@ explicit Lexer::Lexer(const std::string &path) {
 }
 
 Token Lexer::nextToken() {
-    // TODO: implement
     if (this->source.isAtEnd()) {
         return Token(
             TokenType::Eof,
@@ -15,15 +14,22 @@ Token Lexer::nextToken() {
 
     if (this->mode == LexerMode::raw) {
         Token codeblock;
+        const std::string closingFence = std::string(this->fenceLength, this->fenceChar);
+
+        codeblock.type = TokenType::RawText;
+        codeblock.position = this->source.pos;
         
-        // hard-coded value
-        while (!(this->source.peekNextN(3) == "```" && this->source.atLineStart)) {
-            try {
-                codeblock.value.push_back(this->source.next());
-            } catch (const std::exception &e) {
-                // throw something here
-                // throw std::
+        while (
+            !(this->source.peekNextN(this->fenceLength) == closingFence && this->source.atLineStart)
+        ) {
+            if (this->source.isAtEnd()) {
+                Utils::throwException<std::exception>(
+                    std::source_location::current(),
+                    "did not found closing codefence symbols \'{}\' at least {} times until EOF",
+                    this->fenceChar, this->fenceLength
+                );
             }
+            codeblock.value.push_back(this->source.next());
         }
 
         return codeblock;

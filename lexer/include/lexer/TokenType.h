@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 enum class TokenType {
     Text,
 
@@ -26,8 +28,13 @@ enum class TokenType {
 
     BlankLine,
 
+    RawText,
+
     EOL,
-    Eof
+    Eof, 
+    
+    Undefined
 };
 
 TokenType getTokenBySymbol(char c);
+std::string tokenToStringRepresentation(TokenType token);

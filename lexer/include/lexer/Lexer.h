@@ -4,6 +4,7 @@
 #include <lexer/Position.h>
 #include <lexer/SourceCursor.h>
 #include <utils/FormatString.h>
+#include <utils/Exceptions.h>
 
 #include <fstream>
 #include <sstream>
@@ -18,6 +19,11 @@ private: // fields
     std::vector<Token> tokens;
 
     SourceCursor source;
+
+    // code fence
+    char fenceChar = '`';
+    size_t fenceLength = 0;
+    size_t fenceStartIdx = 0;
 
     LexerMode mode = LexerMode::regular;
 

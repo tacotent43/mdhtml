@@ -2,10 +2,12 @@
 
 #include <lexer/Position.h>
 #include <utils/FormatString.h>
+#include <utils/Exceptions.h>
 
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <source_location>
 
 struct SourceCursor {
     std::string rawtext;

@@ -4,11 +4,10 @@ explicit SourceCursor::SourceCursor(const std::string &path) {
     std::ifstream file(path, std::ios_base::in);
     
     if (!file.is_open()) {
-        throw std::runtime_error(
-            Utils::getFormattedString(
-                "[Lexer::SourceCursor::constructor()] cannot open file at {}\n",
-                path
-            )
+        Utils::throwException<std::runtime_error>(
+            std::source_location::current(),
+            "cannot open file at {}",
+            path
         );
     }
     
@@ -29,11 +28,10 @@ bool SourceCursor::isOutOfBounds(size_t offset) const {
 
 SourceCursor& SourceCursor::operator++() {
     if (this->isAtEnd()) {
-        throw std::out_of_range(
-            Utils::getFormattedString(
-                "[Lexer::SourceCursor::operator++()] canot get next symbol: index out of range (curr {}, tried {}, max {})",
-                this->idx, this->idx + 1, this->rawtext.size()
-            )
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "index out of range @ {} | tried {}, max {}: cannot get next symbol",
+            this->idx, this->idx + 1, this->rawtext.size()
         );
     }
     if (this->rawtext[idx] == '\n') {
@@ -56,11 +54,10 @@ std::string SourceCursor::peekNextN(size_t N) {
     std::string symbols;
     for (size_t i = idx + 1; i <= idx + N; ++i) {
         if (isOutOfBounds(3)) {
-            throw std::out_of_range(
-                Utils::getFormattedString(
-                    "[Lexer::SourceCursor::peekNextN()] cannot find closing code fence sequence at {}-{}: found EOF",
-                    this->idx, this->idx + 3
-                )
+            Utils::throwException<std::out_of_range>(
+                std::source_location::current(),
+                "cannot find closing code fence sequence @ {}-{}: found EOF",
+                this->idx, this->idx + 3
             );
         }
         symbols.push_back(this->rawtext[i]);
@@ -74,11 +71,10 @@ char SourceCursor::peek() const {
 
 char SourceCursor::peek(size_t offset) const {
     if (this->isOutOfBounds(offset)) {
-        throw std::out_of_range(
-            Utils::getFormattedString(
-                "[lexer::SourceCursor::peek()] cannot peeek symbol with offset {}:",
-                offset, this->idx, this->idx + offset, this->rawtext.size()
-            )
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot peek symbol with offset {} @ idx {} | tried {}, max {}: index out of range",
+            offset, this->idx, this->idx + offset, this->rawtext.size()
         );
     }
     return this->rawtext[this->idx + offset];
@@ -86,11 +82,10 @@ char SourceCursor::peek(size_t offset) const {
 
 char SourceCursor::next() {
     if (this->isAtEnd()) {
-        throw std::out_of_range(
-            Utils::getFormattedString(
-                "[Lexer::SourceCursor::next()] canot get next symbol: index out of range (curr {}, tried {}, max {})",
-                this->idx, this->idx + 1, this->rawtext.size()
-            )
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannok get next symbol at @ idx {} | tried {}, max {}: index out of range", 
+            this->idx, this->idx + 1, this->rawtext.size()
         );
     }
     this->operator++();
