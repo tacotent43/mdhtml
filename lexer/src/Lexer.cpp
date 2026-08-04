@@ -19,16 +19,19 @@ Token Lexer::nextToken() {
         codeblock.type = TokenType::RawText;
         codeblock.position = this->source.pos;
         
-        while (
-            !(this->source.peekNextN(this->fenceLength) == closingFence && this->source.atLineStart)
-        ) {
-            if (this->source.isAtEnd()) {
+        for (;;) {
+            if (this->source.isOutOfBounds(this->fenceLength)) {
                 Utils::throwException<std::exception>(
                     std::source_location::current(),
                     "did not found closing codefence symbols \'{}\' at least {} times until EOF",
                     this->fenceChar, this->fenceLength
                 );
             }
+
+            if (this->source.peekNextN(this->fenceLength) == closingFence && this->source.atLineStart) {
+                break;
+            }
+
             codeblock.value.push_back(this->source.next());
         }
 
