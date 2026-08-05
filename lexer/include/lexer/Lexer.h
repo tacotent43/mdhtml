@@ -21,6 +21,7 @@ private: // fields
     SourceCursor source;
 
     // code fence
+    std::string fenceLang = "haskell";
     char fenceChar = '`';
     size_t fenceLength = 0;
     size_t fenceStartIdx = 0;

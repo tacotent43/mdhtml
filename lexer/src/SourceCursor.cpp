@@ -18,38 +18,25 @@ explicit SourceCursor::SourceCursor(const std::string &path) {
     file.close();
 }
 
+/*
+Returns `true` when current index is greater or equal to length of source text.
+*/
 bool SourceCursor::isAtEnd() const {
     return this->idx >= this->rawtext.size();
 }
 
+/*
+Returns `true` when current index with `size_t offset` is greater or equal to length of source text.
+*/
 bool SourceCursor::isOutOfBounds(size_t offset) const {
     return (this->idx + offset) >= this->rawtext.size();
 }
 
-SourceCursor& SourceCursor::operator++() {
-    if (this->isAtEnd()) {
-        Utils::throwException<std::out_of_range>(
-            std::source_location::current(),
-            "index out of range @ {} | tried {}, max {}: cannot get next symbol",
-            this->idx, this->idx + 1, this->rawtext.size()
-        );
-    }
-    if (this->rawtext[idx] == '\n') {
-        this->pos.newLine();
-        this->atLineStart = true;
-    } else {
-        this->pos.nextSymbol();
-    }
-    idx++;
-    return *this;
-}
+/*
+Peeks and merges next after current `n` characters.
 
-SourceCursor SourceCursor::operator++(int) {
-    SourceCursor old = *this;
-    this->operator++();
-    return old;
-}
-
+Throws `std::out_of_range` exception.
+*/
 std::string SourceCursor::peekNextN(size_t N) {
     std::string symbols;
     for (size_t i = idx + 1; i <= idx + N; ++i) {
@@ -65,10 +52,18 @@ std::string SourceCursor::peekNextN(size_t N) {
     return symbols;
 }
 
+/* 
+Returns current character
+*/
 char SourceCursor::peek() const {
     return this->rawtext[this->idx];
 }
 
+/* 
+Returns character, which is `size_t offset` positions after current.
+
+Throws `std::out_of_range` exception.
+*/
 char SourceCursor::peek(size_t offset) const {
     if (this->isOutOfBounds(offset)) {
         Utils::throwException<std::out_of_range>(
@@ -80,14 +75,25 @@ char SourceCursor::peek(size_t offset) const {
     return this->rawtext[this->idx + offset];
 }
 
+/*
+Returns current character, then jumps to next.
+
+Throws `std::out_of_range` exception.
+*/
 char SourceCursor::next() {
     if (this->isAtEnd()) {
         Utils::throwException<std::out_of_range>(
             std::source_location::current(),
-            "cannok get next symbol at @ idx {} | tried {}, max {}: index out of range", 
+            "cannot get next symbol at @ idx {} | tried {}, max {}: index out of range", 
             this->idx, this->idx + 1, this->rawtext.size()
         );
     }
-    this->operator++();
+    if (this->rawtext[idx] == '\n') {
+        this->pos.newLine();
+        this->atLineStart = true;
+    } else {
+        this->pos.nextSymbol();
+    }
+    idx++;
     return this->rawtext[this->idx - 1];
 }

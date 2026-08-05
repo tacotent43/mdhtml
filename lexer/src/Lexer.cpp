@@ -35,12 +35,37 @@ Token Lexer::nextToken() {
             codeblock.value.push_back(this->source.next());
         }
 
+        this->mode = LexerMode::regular;
+
         return codeblock;
     }
 
     if (this->source.atLineStart) {
-        
+        // TODO: refactor
+        if (this->source.peekNextN(3) == "~~~" || this->source.peekNextN(3) == "```") {
+            this->fenceChar = this->source.peek(1);
+            this->fenceLength = 3;
+
+            this->source.next();
+
+            this->fenceStartIdx = this->source.idx;
+
+            for (int i = 0; i < 2; ++i) {
+                this->source.next();
+            }
+            
+            for (;;) {
+                if (this->source.next() == this->fenceChar) {
+                    break;
+                }
+                this->fenceLength++;
+            }
+
+            this->mode = LexerMode::raw;
+        }
     }
+
+    // TODO: implement normal mode
 }
 
 void Lexer::tokenize() {

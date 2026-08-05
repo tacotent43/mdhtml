@@ -18,19 +18,12 @@ struct SourceCursor {
 
     bool atLineStart = true;
 
-    SourceCursor() {}
     explicit SourceCursor(const std::string &path);
     
     bool isAtEnd() const;
     bool isOutOfBounds(size_t offset) const;
 
-private:
-    SourceCursor& operator++();
-    SourceCursor operator++(int);
-
-public:
     std::string peekNextN(size_t N);
-
     char peek() const;
     char peek(size_t offset) const;
 
