@@ -43,29 +43,44 @@ Token Lexer::nextToken() {
     if (this->source.atLineStart) {
         // TODO: refactor
         if (this->source.peekNextN(3) == "~~~" || this->source.peekNextN(3) == "```") {
-            this->fenceChar = this->source.peek(1);
+            this->fenceChar = this->source.peek();
             this->fenceLength = 3;
-
-            this->source.next();
-
             this->fenceStartIdx = this->source.idx;
 
-            for (int i = 0; i < 2; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 this->source.next();
             }
             
             for (;;) {
-                if (this->source.next() == this->fenceChar) {
+                if (this->source.next() != this->fenceChar) {
                     break;
                 }
                 this->fenceLength++;
             }
 
             this->mode = LexerMode::raw;
+            return Token()
         }
     }
 
-    // TODO: implement normal mode
+    // Normal mode
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
+        std::string value;
+        while (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
+            value.push_back(this->source.next());
+        }
+        this->tokens.push_back(
+            Token(
+                TokenType::Text,
+                this->source.pos,
+                value
+            )
+        );
+    }
+
+    while (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
+        
+    }
 }
 
 void Lexer::tokenize() {

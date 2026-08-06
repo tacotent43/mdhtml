@@ -33,20 +33,20 @@ bool SourceCursor::isOutOfBounds(size_t offset) const {
 }
 
 /*
-Peeks and merges next after current `n` characters.
+Peeks and merges all characters in range of `N` symbols.
 
 Throws `std::out_of_range` exception.
 */
 std::string SourceCursor::peekNextN(size_t N) {
     std::string symbols;
+    if (isOutOfBounds(N)) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot peek next N-symbol sequence @ {}-{}: found EOF",
+            this->idx, this->idx + N
+        );
+    }
     for (size_t i = idx + 1; i <= idx + N; ++i) {
-        if (isOutOfBounds(3)) {
-            Utils::throwException<std::out_of_range>(
-                std::source_location::current(),
-                "cannot find closing code fence sequence @ {}-{}: found EOF",
-                this->idx, this->idx + 3
-            );
-        }
         symbols.push_back(this->rawtext[i]);
     }
     return symbols;
