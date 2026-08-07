@@ -32,26 +32,6 @@ bool SourceCursor::isOutOfBounds(size_t offset) const {
     return (this->idx + offset) >= this->rawtext.size();
 }
 
-/*
-Peeks and merges all characters in range of `N` symbols.
-
-Throws `std::out_of_range` exception.
-*/
-std::string SourceCursor::peekNextN(size_t N) {
-    std::string symbols;
-    if (isOutOfBounds(N)) {
-        Utils::throwException<std::out_of_range>(
-            std::source_location::current(),
-            "cannot peek next N-symbol sequence @ {}-{}: found EOF",
-            this->idx, this->idx + N
-        );
-    }
-    for (size_t i = idx + 1; i <= idx + N; ++i) {
-        symbols.push_back(this->rawtext[i]);
-    }
-    return symbols;
-}
-
 /* 
 Returns current character
 */
@@ -73,6 +53,35 @@ char SourceCursor::peek(size_t offset) const {
         );
     }
     return this->rawtext[this->idx + offset];
+}
+
+/*
+Returns next character after current.
+
+Throw `std::out_of_range` exception.
+*/
+char SourceCursor::peekNext() const {
+    return this->peek(1);
+}
+
+/*
+Peeks and merges all characters in range of `N` symbols.
+
+Throws `std::out_of_range` exception.
+*/
+std::string SourceCursor::peekNextN(size_t N) const {
+    std::string symbols;
+    if (isOutOfBounds(N)) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot peek next N-symbols sequence @ {}-{}: found EOF",
+            this->idx, this->idx + N
+        );
+    }
+    for (size_t i = idx; i < idx + N; ++i) {
+        symbols.push_back(this->rawtext[i]);
+    }
+    return symbols;
 }
 
 /*

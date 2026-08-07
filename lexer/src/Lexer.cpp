@@ -5,6 +5,7 @@ explicit Lexer::Lexer(const std::string &path) {
 }
 
 Token Lexer::nextToken() {
+    // End of file
     if (this->source.isAtEnd()) {
         return Token(
             TokenType::Eof,
@@ -12,6 +13,7 @@ Token Lexer::nextToken() {
         );
     }
 
+    // Raw-mode for code blocks
     if (this->mode == LexerMode::raw) {
         Token codeblock;
         const std::string closingFence = std::string(this->fenceLength, this->fenceChar);
@@ -40,8 +42,8 @@ Token Lexer::nextToken() {
         return codeblock;
     }
 
+    // At the beginning of the line
     if (this->source.atLineStart) {
-        // TODO: refactor
         if (this->source.peekNextN(3) == "~~~" || this->source.peekNextN(3) == "```") {
             this->fenceChar = this->source.peek();
             this->fenceLength = 3;
@@ -59,28 +61,95 @@ Token Lexer::nextToken() {
             }
 
             this->mode = LexerMode::raw;
-            return Token()
+            return Token();
         }
     }
 
     // Normal mode
     if (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
         std::string value;
-        while (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
+        
+        while (
+            getTokenBySymbol(this->source.peek()) == TokenType::Text ||
+            getTokenBySymbol(this->source.peek()) == TokenType::Space
+        ) {
             value.push_back(this->source.next());
         }
-        this->tokens.push_back(
-            Token(
-                TokenType::Text,
-                this->source.pos,
-                value
-            )
+        
+        return Token(
+            TokenType::Text,
+            this->source.pos,
+            value
         );
     }
 
-    while (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
-        
+    // Hash
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
+        bool isHeading = true;
+        std::string value = "";
+        Position pos = this->source.pos;
+
+        if (this->source.atLineStart) {
+            if (
+                getTokenBySymbol(this->source.peekNext()) == TokenType::Hash ||
+                getTokenBySymbol(this->source.peekNext()) == TokenType::Space
+            ) {
+                isHeading = true;
+            } else {
+                isHeading = false;
+            }
+        } else {
+            isHeading = false;
+        }
+
+        // hash means heading
+        if (isHeading) {
+            while (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
+                value.push_back(this->source.next());
+            }
+
+            return Token(
+                TokenType::HeadingMarker,
+                pos, value
+            );
+        }
+        // hash means tag
+        while(getTokenBySymbol(this->source.peek()) != TokenType::Space) {
+            value.push_back(this->source.next());
+        }
+
+        return Token(
+            TokenType::Hash,
+            pos, value
+        );
     }
+
+    // End of line
+    if (getTokenBySymbol(this->source.peek()) == TokenType::EOL) {
+        return Token(
+            TokenType::EOL,
+            this->source.pos, 
+            std::string(1, this->source.next())
+        );
+    }
+
+    // Asterisk
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Asterisk) {
+        bool isListItem = true;
+        std::string value = "";
+        
+        // etc.
+
+        // Asterisk means a member of list
+
+        // return Token(
+        //     TokenType::Asterisk,
+        //     this->source.pos,
+
+        // );
+    }
+
+    return Token();
 }
 
 void Lexer::tokenize() {
