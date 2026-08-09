@@ -54,7 +54,8 @@ Token Lexer::nextToken() {
             }
             
             for (;;) {
-                if (this->source.next() != this->fenceChar) {
+                if (this->source.peek() != this->fenceChar) {
+                    this->source.next();
                     break;
                 }
                 this->fenceLength++;
@@ -82,6 +83,63 @@ Token Lexer::nextToken() {
             value
         );
     }
+
+    // End of line
+    if (getTokenBySymbol(this->source.peek()) == TokenType::EOL) {
+        return Token(
+            TokenType::EOL,
+            this->source.pos, 
+            std::string(1, this->source.next())
+        );
+    }
+
+    // Asterisk
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Asterisk) {
+        bool isListItem = true;
+        std::string value = "";
+        
+        // etc.
+
+        // Asterisk means a member of list
+
+        // return Token(
+        //     TokenType::Asterisk,
+        //     this->source.pos,
+
+        // );
+    }
+
+    // Underscore
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Underscore) {
+        if (getTokenBySymbol(this->source.peekNext()) == TokenType::Space) {
+            return Token(
+                TokenType::Text,
+                this->source.pos,
+                std::string(1, this->source.next())
+            );
+        }
+        
+        // underscore means italic/bold/italic+bold
+        std::string value = "";
+        Position pos = this->source.pos;
+
+        while (getTokenBySymbol(this->source.peekNext()) == TokenType::Underscore) {
+            value.push_back(this->source.next());
+        }
+
+        return Token(
+            TokenType::Underscore,
+            pos, value
+        );
+    }
+
+    // Backtick
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Backtick) {
+        std::string value = "";
+        
+        // TODO: implement
+    }
+
 
     // Hash
     if (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
@@ -124,32 +182,70 @@ Token Lexer::nextToken() {
         );
     }
 
-    // End of line
-    if (getTokenBySymbol(this->source.peek()) == TokenType::EOL) {
-        return Token(
-            TokenType::EOL,
-            this->source.pos, 
-            std::string(1, this->source.next())
-        );
-    }
-
-    // Asterisk
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Asterisk) {
-        bool isListItem = true;
+    // Dollar Sign
+    if (getTokenBySymbol(this->source.peek()) == TokenType::DollarSign) {
         std::string value = "";
-        
-        // etc.
 
-        // Asterisk means a member of list
+        // collecting
+        while (getTokenBySymbol(this->source.peek()))
 
-        // return Token(
-        //     TokenType::Asterisk,
-        //     this->source.pos,
+        if (getTokenBySymbol(this->source.peekNext()) == TokenType::Space) {
+            
+        }
 
-        // );
+        // TODO: implement
     }
 
-    return Token();
+    // Opening Angle Bracket
+    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningAngleBracket) {
+        // TODO: implement
+    }
+
+    // Closing Angle Bracket
+    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingAngleBracket) {
+        // TODO: implement
+    }
+
+    // Opening Curly Brace
+    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningCurlyBrace) {
+        // TODO: implement
+    }
+
+    // Closing Curly Brace
+    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingCurlyBrace) {
+        // TODO: implement
+    }
+
+    // Opening Square Bracket
+    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningSquareBracket) {
+        // TODO: implement
+    }
+
+    // Closing Square Bracket
+    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingSquareBracket) {
+        // TODO: implement
+    }
+
+    // Tilde
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Tilde) {
+        // TODO: implement
+    }
+
+    // Caret
+    if (getTokenBySymbol(this->source.peek()) == TokenType::Caret) {
+        // TODO: implement
+    }
+
+    // BlankLine
+    if (getTokenBySymbol(this->source.peek()) == TokenType::BlankLine) {
+        // TODO: implement
+    }
+
+    this->source.next();
+    return Token(
+        TokenType::Undefined,
+        this->source.pos
+    );
 }
 
 void Lexer::tokenize() {

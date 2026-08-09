@@ -23,10 +23,10 @@ struct SourceCursor {
     bool isAtEnd() const;
     bool isOutOfBounds(size_t offset) const;
 
-    char peek() const;
-    char peek(size_t offset) const;
-    char peekNext() const;
+    ClassifiedChar peek() const;
+    ClassifiedChar peek(size_t offset) const;
+    ClassifiedChar peekNext() const;
     std::string peekNextN(size_t N) const;
 
-    char next();
+    ClassifiedChar next();
 };

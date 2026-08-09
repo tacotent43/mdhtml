@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 
 enum class TokenType {
     Text,
@@ -16,12 +17,12 @@ enum class TokenType {
     Hash,
     DollarSign,
 
-    OpeningSquareBracket,
-    ClosingSquareBracket,
-    OpeningCurlyBrace,
-    ClosingCurlyBrace,
     OpeningAngleBracket,
     ClosingAngleBracket,
+    OpeningCurlyBrace,
+    ClosingCurlyBrace,
+    OpeningSquareBracket,
+    ClosingSquareBracket,
 
     Tilde, 
     Caret, 
@@ -31,9 +32,13 @@ enum class TokenType {
     RawText,
 
     EOL,
-    Eof, 
+    Eof,
     
     Undefined
+};
+
+std::unordered_map<TokenType, char> TokenTypeChar = {
+    
 };
 
 TokenType getTokenBySymbol(char c);
