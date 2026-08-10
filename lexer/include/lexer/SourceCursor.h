@@ -1,8 +1,9 @@
 #pragma once
 
 #include <lexer/Position.h>
-#include <utils/FormatString.h>
+#include <lexer/ClassifiedChar.h>
 #include <utils/Exceptions.h>
+#include <utils/FormatString.h>
 
 #include <string>
 #include <fstream>

@@ -4,42 +4,52 @@ explicit Lexer::Lexer(const std::string &path) {
     this->source = SourceCursor(path);
 }
 
+// private methods
+Token Lexer::atEnd() {
+    return Token(
+        TokenType::Eof,
+        this->source.pos
+    );
+}
+
+Token Lexer::readRawText() {
+    Token codeblock;
+    const std::string closingFence = std::string(this->fenceLength, this->fenceChar);
+
+    codeblock.type = TokenType::RawText;
+    codeblock.position = this->source.pos;
+    
+    for (;;) {
+        if (this->source.isOutOfBounds(this->fenceLength)) {
+            Utils::throwException<std::exception>(
+                std::source_location::current(),
+                "did not found closing codefence symbols \'{}\' at least {} times until EOF",
+                this->fenceChar, this->fenceLength
+            );
+        }
+
+        if (this->source.peekNextN(this->fenceLength) == closingFence && this->source.atLineStart) {
+            break;
+        }
+
+        codeblock.value.push_back(this->source.next());
+    }
+
+    this->mode = LexerMode::regular;
+
+    return codeblock;
+}
+
+// public methods
 Token Lexer::nextToken() {
     // End of file
     if (this->source.isAtEnd()) {
-        return Token(
-            TokenType::Eof,
-            this->source.pos
-        );
+        return this->atEnd();
     }
 
     // Raw-mode for code blocks
     if (this->mode == LexerMode::raw) {
-        Token codeblock;
-        const std::string closingFence = std::string(this->fenceLength, this->fenceChar);
-
-        codeblock.type = TokenType::RawText;
-        codeblock.position = this->source.pos;
-        
-        for (;;) {
-            if (this->source.isOutOfBounds(this->fenceLength)) {
-                Utils::throwException<std::exception>(
-                    std::source_location::current(),
-                    "did not found closing codefence symbols \'{}\' at least {} times until EOF",
-                    this->fenceChar, this->fenceLength
-                );
-            }
-
-            if (this->source.peekNextN(this->fenceLength) == closingFence && this->source.atLineStart) {
-                break;
-            }
-
-            codeblock.value.push_back(this->source.next());
-        }
-
-        this->mode = LexerMode::regular;
-
-        return codeblock;
+        return this->readRawText();
     }
 
     // At the beginning of the line
@@ -67,12 +77,12 @@ Token Lexer::nextToken() {
     }
 
     // Normal mode
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Text) {
+    if (this->source.peek().classify() == sck::Text) {
         std::string value;
         
         while (
-            getTokenBySymbol(this->source.peek()) == TokenType::Text ||
-            getTokenBySymbol(this->source.peek()) == TokenType::Space
+            this->source.peek().classify() == sck::Text ||
+            this->source.peek().classify() == sck::Space
         ) {
             value.push_back(this->source.next());
         }
@@ -85,7 +95,7 @@ Token Lexer::nextToken() {
     }
 
     // End of line
-    if (getTokenBySymbol(this->source.peek()) == TokenType::EOL) {
+    if (this->source.peek().classify() == sck::EOL) {
         return Token(
             TokenType::EOL,
             this->source.pos, 
@@ -94,7 +104,7 @@ Token Lexer::nextToken() {
     }
 
     // Asterisk
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Asterisk) {
+    if (this->source.peek().classify() == sck::Asterisk) {
         bool isListItem = true;
         std::string value = "";
         
@@ -110,8 +120,16 @@ Token Lexer::nextToken() {
     }
 
     // Underscore
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Underscore) {
-        if (getTokenBySymbol(this->source.peekNext()) == TokenType::Space) {
+    if (this->source.peek().classify() == sck::Underscore) {
+        std::string value = "";
+
+        // collecting
+        while (this->source.peek().classify() == sck::Underscore) {
+            value.push_back(this->source.next());
+        }
+
+        // 
+        if (this->source.peek().classify() == sck::Space) {
             return Token(
                 TokenType::Text,
                 this->source.pos,
@@ -123,7 +141,7 @@ Token Lexer::nextToken() {
         std::string value = "";
         Position pos = this->source.pos;
 
-        while (getTokenBySymbol(this->source.peekNext()) == TokenType::Underscore) {
+        while (this->source.peek().classify() == sck::Underscore) {
             value.push_back(this->source.next());
         }
 
@@ -134,23 +152,22 @@ Token Lexer::nextToken() {
     }
 
     // Backtick
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Backtick) {
+    if (this->source.peek().classify() == sck::Backtick) {
         std::string value = "";
         
         // TODO: implement
     }
 
-
     // Hash
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
+    if (this->source.peek().classify() == sck::Hash) {
         bool isHeading = true;
         std::string value = "";
         Position pos = this->source.pos;
 
         if (this->source.atLineStart) {
             if (
-                getTokenBySymbol(this->source.peekNext()) == TokenType::Hash ||
-                getTokenBySymbol(this->source.peekNext()) == TokenType::Space
+                this->source.peekNext().classify() == sck::Hash ||
+                this->source.peekNext().classify() == sck::Space
             ) {
                 isHeading = true;
             } else {
@@ -162,7 +179,7 @@ Token Lexer::nextToken() {
 
         // hash means heading
         if (isHeading) {
-            while (getTokenBySymbol(this->source.peek()) == TokenType::Hash) {
+            while (this->source.peek().classify() == sck::Hash) {
                 value.push_back(this->source.next());
             }
 
@@ -171,8 +188,9 @@ Token Lexer::nextToken() {
                 pos, value
             );
         }
+
         // hash means tag
-        while(getTokenBySymbol(this->source.peek()) != TokenType::Space) {
+        while(this->source.peek().classify() != sck::Space) {
             value.push_back(this->source.next());
         }
 
@@ -183,13 +201,31 @@ Token Lexer::nextToken() {
     }
 
     // Dollar Sign
-    if (getTokenBySymbol(this->source.peek()) == TokenType::DollarSign) {
+    if (this->source.peek().classify() == sck::Dollar) {
         std::string value = "";
+        Position pos;
 
         // collecting
-        while (getTokenBySymbol(this->source.peek()))
+        while (this->source.peek().classify() == sck::Dollar) {
+            value.push_back(this->source.next());
+        }
+        
+        size_t dollarSequenceLength = value.size();
 
-        if (getTokenBySymbol(this->source.peekNext()) == TokenType::Space) {
+        // Dollar Sign means nothing
+        if (this->source.peekNext().classify() == sck::Space) {
+            return Token(
+                TokenType::Text,
+                pos, value
+            );
+        }
+
+        // Dollar Sign means start of LaTeX sequence
+        while (this->source.peek().classify() != sck::Dollar) {
+            value.push_back(this->source.next());
+        }
+
+        if (isOpeningSingleSequence) {
             
         }
 
@@ -197,47 +233,47 @@ Token Lexer::nextToken() {
     }
 
     // Opening Angle Bracket
-    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningAngleBracket) {
+    if (this->source.peek().classify() == sck::OpeningAngleBracket) {
         // TODO: implement
     }
 
     // Closing Angle Bracket
-    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingAngleBracket) {
+    if (this->source.peek().classify() == sck::ClosingAngleBracket) {
         // TODO: implement
     }
 
     // Opening Curly Brace
-    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningCurlyBrace) {
+    if (this->source.peek().classify() == sck::OpeningCurlyBrace) {
         // TODO: implement
     }
 
     // Closing Curly Brace
-    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingCurlyBrace) {
+    if (this->source.peek().classify() == sck::ClosingCurlyBrace) {
         // TODO: implement
     }
 
     // Opening Square Bracket
-    if (getTokenBySymbol(this->source.peek()) == TokenType::OpeningSquareBracket) {
+    if (this->source.peek().classify() == sck::OpeningSquareBracket) {
         // TODO: implement
     }
 
     // Closing Square Bracket
-    if (getTokenBySymbol(this->source.peek()) == TokenType::ClosingSquareBracket) {
+    if (this->source.peek().classify() == sck::ClosingSquareBracket) {
         // TODO: implement
     }
 
     // Tilde
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Tilde) {
+    if (this->source.peek().classify() == sck::Tilde) {
         // TODO: implement
     }
 
     // Caret
-    if (getTokenBySymbol(this->source.peek()) == TokenType::Caret) {
+    if (this->source.peek().classify() == sck::Caret) {
         // TODO: implement
     }
 
     // BlankLine
-    if (getTokenBySymbol(this->source.peek()) == TokenType::BlankLine) {
+    if (this->source.peek().classify() == sck::BlankLine) {
         // TODO: implement
     }
 

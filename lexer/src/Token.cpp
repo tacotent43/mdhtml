@@ -15,7 +15,7 @@ std::string Token::repr(int indent) const {
         "{}TOKEN @ {}l {}s \{\n{}\tType: {}\n{}\tValue: {}\n{}\}",
 
         indentStr, this->position.line, this->position.symbol, 
-        indentStr, tokenToStringRepresentation(this->type),
+        indentStr, tokenTypeStringRepr.at(this->type)),
         indentStr, shortened,
         indentStr
     );

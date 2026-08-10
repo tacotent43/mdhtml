@@ -12,7 +12,7 @@ enum class SpecialCharKind {
     Underscore,
     Backtick,
     Hash,
-    DollarSign,
+    Dollar,
 
     OpeningAngleBracket,
     ClosingAngleBracket,
@@ -29,15 +29,15 @@ enum class SpecialCharKind {
 
 using sck = SpecialCharKind;
 
-static const std::unordered_map<char, sck> specialCharToKind = {
+inline const std::unordered_map<char, sck> specialCharToKind = {
     {' ', sck::Space},
 
     {'*', sck::Asterisk},
-    {' ', sck::Hyphen},
+    {'-', sck::Hyphen},
     {'_', sck::Underscore},
     {'`', sck::Backtick},
     {'#', sck::Hash},
-    {'$', sck::DollarSign},
+    {'$', sck::Dollar},
 
     {'<', sck::OpeningAngleBracket},
     {'>', sck::ClosingAngleBracket},

@@ -35,7 +35,7 @@ bool SourceCursor::isOutOfBounds(size_t offset) const {
 /* 
 Returns current character
 */
-char SourceCursor::peek() const {
+ClassifiedChar SourceCursor::peek() const {
     return this->rawtext[this->idx];
 }
 
@@ -44,7 +44,7 @@ Returns character, which is `size_t offset` positions after current.
 
 Throws `std::out_of_range` exception.
 */
-char SourceCursor::peek(size_t offset) const {
+ClassifiedChar SourceCursor::peek(size_t offset) const {
     if (this->isOutOfBounds(offset)) {
         Utils::throwException<std::out_of_range>(
             std::source_location::current(),
@@ -60,7 +60,7 @@ Returns next character after current.
 
 Throw `std::out_of_range` exception.
 */
-char SourceCursor::peekNext() const {
+ClassifiedChar SourceCursor::peekNext() const {
     return this->peek(1);
 }
 
@@ -89,7 +89,7 @@ Returns current character, then jumps to next.
 
 Throws `std::out_of_range` exception.
 */
-char SourceCursor::next() {
+ClassifiedChar SourceCursor::next() {
     if (this->isAtEnd()) {
         Utils::throwException<std::out_of_range>(
             std::source_location::current(),

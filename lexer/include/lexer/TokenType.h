@@ -17,6 +17,9 @@ enum class TokenType {
     Hash,
     DollarSign,
 
+    InlineLaTeXSequence,
+    MultilineLaTeXSequence,
+
     OpeningAngleBracket,
     ClosingAngleBracket,
     OpeningCurlyBrace,
@@ -37,9 +40,36 @@ enum class TokenType {
     Undefined
 };
 
-std::unordered_map<TokenType, char> TokenTypeChar = {
-    
-};
+inline const std::unordered_map<TokenType, std::string> tokenTypeStringRepr = {
+    {TokenType::Text, "Text"},
+    {TokenType::Space, "Space"},
+    {TokenType::HeadingMarker, "HeadingMarker"},
 
-TokenType getTokenBySymbol(char c);
-std::string tokenToStringRepresentation(TokenType token);
+    {TokenType::Asterisk, "Asterisk"},
+    {TokenType::Hyphen, "Hyphen"},
+    {TokenType::Underscore, "Underscore"},
+    {TokenType::Backtick, "Backtick"},
+    {TokenType::Hash, "Hash"},
+    {TokenType::DollarSign, "DollarSign"},
+
+    {TokenType::InlineLaTeXSequence, "InlineLaTeXSequence"},
+    {TokenType::MultilineLaTeXSequence, "MultilineLaTeXSequence"},
+
+    {TokenType::OpeningAngleBracket, "OpeningAngleBracket"},
+    {TokenType::ClosingAngleBracket, "ClosingAngleBracket"},
+    {TokenType::OpeningCurlyBrace, "OpeningCurlyBrace"},
+    {TokenType::ClosingCurlyBrace, "ClosingCurlyBrace"},
+    {TokenType::OpeningSquareBracket, "OpeningSquareBracket"},
+    {TokenType::ClosingSquareBracket, "ClosingSquareBracket"},
+
+    {TokenType::Tilde, "Tilde"},
+    {TokenType::Caret, "Caret"},
+
+    {TokenType::BlankLine, "BlankLine"},
+    {TokenType::RawText, "RawText"},
+
+    {TokenType::EOL, "EOL"},
+    {TokenType::Eof, "Eof"},
+
+    {TokenType::Undefined, "Undefined"}
+};

@@ -28,6 +28,11 @@ private: // fields
 
     LexerMode mode = LexerMode::regular;
 
+private: // methods
+    Token atEnd();
+    Token readRawText();
+
+
 public:
     explicit Lexer(const std::string &path);
 
