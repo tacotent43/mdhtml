@@ -5,8 +5,6 @@
 enum class SpecialCharKind {
     Text,
 
-    Space,
-    
     Asterisk,
     Hyphen,
     Underscore,
@@ -30,8 +28,6 @@ enum class SpecialCharKind {
 using sck = SpecialCharKind;
 
 inline const std::unordered_map<char, sck> specialCharToKind = {
-    {' ', sck::Space},
-
     {'*', sck::Asterisk},
     {'-', sck::Hyphen},
     {'_', sck::Underscore},

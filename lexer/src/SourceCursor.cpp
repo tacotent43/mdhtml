@@ -102,6 +102,7 @@ ClassifiedChar SourceCursor::next() {
         this->atLineStart = true;
     } else {
         this->pos.nextSymbol();
+        this->atLineStart = false;
     }
     idx++;
     return this->rawtext[this->idx - 1];

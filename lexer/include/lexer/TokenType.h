@@ -6,8 +6,6 @@
 enum class TokenType {
     Text,
 
-    Space,
-    
     HeadingMarker,
 
     Asterisk,
@@ -15,10 +13,9 @@ enum class TokenType {
     Underscore,
     Backtick,
     Hash,
-    DollarSign,
+    Dollar,
 
-    InlineLaTeXSequence,
-    MultilineLaTeXSequence,
+    OpeningCodeSequence,
 
     OpeningAngleBracket,
     ClosingAngleBracket,
@@ -42,7 +39,6 @@ enum class TokenType {
 
 inline const std::unordered_map<TokenType, std::string> tokenTypeStringRepr = {
     {TokenType::Text, "Text"},
-    {TokenType::Space, "Space"},
     {TokenType::HeadingMarker, "HeadingMarker"},
 
     {TokenType::Asterisk, "Asterisk"},
@@ -50,10 +46,9 @@ inline const std::unordered_map<TokenType, std::string> tokenTypeStringRepr = {
     {TokenType::Underscore, "Underscore"},
     {TokenType::Backtick, "Backtick"},
     {TokenType::Hash, "Hash"},
-    {TokenType::DollarSign, "DollarSign"},
+    {TokenType::Dollar, "Dollar"},
 
-    {TokenType::InlineLaTeXSequence, "InlineLaTeXSequence"},
-    {TokenType::MultilineLaTeXSequence, "MultilineLaTeXSequence"},
+    {TokenType::OpeningCodeSequence, "OpeningCodeSequence"},
 
     {TokenType::OpeningAngleBracket, "OpeningAngleBracket"},
     {TokenType::ClosingAngleBracket, "ClosingAngleBracket"},
