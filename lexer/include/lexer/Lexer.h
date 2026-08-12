@@ -28,6 +28,9 @@ private: // fields
 
     LexerMode mode = LexerMode::regular;
 
+private: // methods
+    Token collectSymbolsToToken(const sck &charkind, const TokenType &tokentype);
+
 public:
     explicit Lexer(const std::string &path);
 

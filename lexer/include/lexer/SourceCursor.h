@@ -1,8 +1,9 @@
 #pragma once
 
 #include <lexer/Position.h>
-#include <utils/FormatString.h>
+#include <lexer/ClassifiedChar.h>
 #include <utils/Exceptions.h>
+#include <utils/FormatString.h>
 
 #include <string>
 #include <fstream>
@@ -23,10 +24,10 @@ struct SourceCursor {
     bool isAtEnd() const;
     bool isOutOfBounds(size_t offset) const;
 
-    char peek() const;
-    char peek(size_t offset) const;
-    char peekNext() const;
+    ClassifiedChar peek() const;
+    ClassifiedChar peek(size_t offset) const;
+    ClassifiedChar peekNext() const;
     std::string peekNextN(size_t N) const;
 
-    char next();
+    ClassifiedChar next();
 };
