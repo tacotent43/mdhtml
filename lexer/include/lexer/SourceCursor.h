@@ -19,6 +19,7 @@ struct SourceCursor {
 
     bool atLineStart = true;
 
+    SourceCursor();
     explicit SourceCursor(const std::string &path);
     
     bool isAtEnd() const;

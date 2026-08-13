@@ -1,6 +1,8 @@
 #include <lexer/SourceCursor.h>
 
-explicit SourceCursor::SourceCursor(const std::string &path) {
+SourceCursor::SourceCursor() {}
+
+SourceCursor::SourceCursor(const std::string &path) {
     std::ifstream file(path, std::ios_base::in);
     
     if (!file.is_open()) {

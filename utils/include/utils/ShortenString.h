@@ -4,7 +4,7 @@
 #include <utils/FormatString.h>
 
 namespace Utils {
-    std::string shortenString(const std::string_view &str, size_t shortenTo) {
+    inline std::string shortenString(const std::string_view &str, size_t shortenTo) {
         std::string beginning, ending;
         
         for (size_t i = 0; i < shortenTo; ++i) {

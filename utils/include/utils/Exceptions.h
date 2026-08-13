@@ -18,7 +18,7 @@ namespace Utils {
             std::make_format_args(args...)
         );
 
-        throw Exception(
+        throw std::runtime_error(
             std::vformat(
                 "[{}] {}\n",
                 std::make_format_args(function, message)

@@ -12,10 +12,10 @@ std::string Token::repr(int indent) const {
     indentStr = std::string(indent, '\t');
 
     return Utils::getFormattedString(
-        "{}TOKEN @ {}l {}s \{\n{}\tType: {}\n{}\tValue: {}\n{}\}",
+        "{}TOKEN @ {}l {}s {{\n{}\tType: {}\n{}\tValue: {}\n{}}}",
 
         indentStr, this->position.line, this->position.symbol, 
-        indentStr, tokenTypeStringRepr.at(this->type)),
+        indentStr, tokenTypeStringRepr.at(this->type),
         indentStr, shortened,
         indentStr
     );

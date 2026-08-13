@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(ast)
+add_subdirectory(lexer)
 add_subdirectory(utils)
 
 add_executable(mdhtml
@@ -20,5 +21,6 @@ add_executable(mdhtml
 target_link_libraries(mdhtml
     PRIVATE
         ast
+        lexer
         utils
 )

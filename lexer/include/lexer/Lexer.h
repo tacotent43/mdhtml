@@ -8,6 +8,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 enum class LexerMode {
     regular, 

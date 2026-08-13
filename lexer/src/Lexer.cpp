@@ -1,6 +1,6 @@
 #include <lexer/Lexer.h>
 
-explicit Lexer::Lexer(const std::string &path) {
+Lexer::Lexer(const std::string &path) {
     this->source = SourceCursor(path);
 }
 
@@ -21,6 +21,7 @@ Token Lexer::collectSymbolsToToken(const sck &charkind, const TokenType &tokenty
 Token Lexer::nextToken() {
     // End of file
     if (this->source.isAtEnd()) {
+        std::cerr << "\nEOF\n";
         return Token(
             TokenType::Eof,
             this->source.pos
@@ -63,18 +64,11 @@ Token Lexer::nextToken() {
             Position pos = this->source.pos;
 
             this->fenceChar = this->source.peek();
-            this->fenceLength = 3;
+            this->fenceLength = 0;
             this->fenceStartIdx = this->source.idx;
 
-            for (int i = 0; i < 3; ++i) {
+            while (this->source.peek() == this->fenceChar) {
                 value.push_back(this->source.next());
-            }
-            
-            for (;;) {
-                if (this->source.peek() != this->fenceChar) {
-                    this->source.next();
-                    break;
-                }
                 this->fenceLength++;
             }
 
@@ -173,5 +167,12 @@ Token Lexer::nextToken() {
 }
 
 void Lexer::tokenize() {
-    // TODO: implement
+    for (;;) {
+        Token token = this->nextToken();
+        this->tokens.push_back(token);
+
+        if (token.type == TokenType::Eof) {
+            break;
+        }
+    }
 }
