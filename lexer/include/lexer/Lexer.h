@@ -38,5 +38,7 @@ public:
     Token nextToken();
     void tokenize();
 
+    void repr() const;
+
     ~Lexer() = default;
 };

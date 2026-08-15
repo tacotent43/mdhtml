@@ -4,7 +4,7 @@ Lexer::Lexer(const std::string &path) {
     this->source = SourceCursor(path);
 }
 
-// private methods
+// private method
 Token Lexer::collectSymbolsToToken(const sck &charkind, const TokenType &tokentype) {
     std::string value = "";
     Position pos = this->source.pos;
@@ -17,11 +17,9 @@ Token Lexer::collectSymbolsToToken(const sck &charkind, const TokenType &tokenty
 }
 
 // public methods
-// refactor
 Token Lexer::nextToken() {
     // End of file
     if (this->source.isAtEnd()) {
-        std::cerr << "\nEOF\n";
         return Token(
             TokenType::Eof,
             this->source.pos
@@ -38,7 +36,12 @@ Token Lexer::nextToken() {
         
         for (;;) {
             if (this->source.isOutOfBounds(this->fenceLength)) {
-                Utils::throwException<std::exception>(
+                // [debug]
+                for (auto token : this->tokens) {
+                    std::cerr << token.repr(0) << '\n';
+                }
+
+                Utils::throwException<std::out_of_range>(
                     std::source_location::current(),
                     "did not found closing codefence symbols \'{}\' at least {} times until EOF",
                     this->fenceChar, this->fenceLength
@@ -70,6 +73,14 @@ Token Lexer::nextToken() {
             while (this->source.peek() == this->fenceChar) {
                 value.push_back(this->source.next());
                 this->fenceLength++;
+            }
+
+            // latest token was raw text - current token is NOT the opening sequence
+            if (this->tokens[this->tokens.size() - 1].type == TokenType::RawText) {
+                return Token(
+                    TokenType::ClosingCodeSequence,
+                    pos, value
+                );
             }
 
             this->mode = LexerMode::raw;
@@ -174,5 +185,11 @@ void Lexer::tokenize() {
         if (token.type == TokenType::Eof) {
             break;
         }
+    }
+}
+
+void Lexer::repr() const {
+    for (const Token &token : this->tokens) {
+        std::cerr << token.repr(0) << '\n';
     }
 }

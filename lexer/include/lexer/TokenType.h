@@ -16,6 +16,7 @@ enum class TokenType {
     Dollar,
 
     OpeningCodeSequence,
+    ClosingCodeSequence,
 
     OpeningAngleBracket,
     ClosingAngleBracket,
@@ -49,6 +50,7 @@ inline const std::unordered_map<TokenType, std::string> tokenTypeStringRepr = {
     {TokenType::Dollar, "Dollar"},
 
     {TokenType::OpeningCodeSequence, "OpeningCodeSequence"},
+    {TokenType::ClosingCodeSequence, "ClosingCodeSequence"},
 
     {TokenType::OpeningAngleBracket, "OpeningAngleBracket"},
     {TokenType::ClosingAngleBracket, "ClosingAngleBracket"},

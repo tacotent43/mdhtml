@@ -47,12 +47,15 @@ Returns character, which is `size_t offset` positions after current.
 Throws `std::out_of_range` exception.
 */
 ClassifiedChar SourceCursor::peek(size_t offset) const {
-    if (this->isOutOfBounds(offset)) {
+    if (this->idx + offset > this->rawtext.size()) {
         Utils::throwException<std::out_of_range>(
             std::source_location::current(),
             "cannot peek symbol with offset {} @ idx {} | tried {}, max {}: index out of range",
             offset, this->idx, this->idx + offset, this->rawtext.size()
         );
+    }
+    if (this->isOutOfBounds(offset)) {
+        return '\0';
     }
     return this->rawtext[this->idx + offset];
 }
@@ -68,19 +71,11 @@ ClassifiedChar SourceCursor::peekNext() const {
 
 /*
 Peeks and merges all characters in range of `N` symbols.
-
-Throws `std::out_of_range` exception.
 */
 std::string SourceCursor::peekNextN(size_t N) const {
     std::string symbols;
-    if (isOutOfBounds(N)) {
-        Utils::throwException<std::out_of_range>(
-            std::source_location::current(),
-            "cannot peek next N-symbols sequence @ {}-{}: found EOF",
-            this->idx, this->idx + N
-        );
-    }
-    for (size_t i = idx; i < idx + N; ++i) {
+    size_t end = std::min(idx + N, this->rawtext.size());
+    for (size_t i = idx; i < end; ++i) {
         symbols.push_back(this->rawtext[i]);
     }
     return symbols;
@@ -89,21 +84,20 @@ std::string SourceCursor::peekNextN(size_t N) const {
 /*
 Returns current character, then jumps to next.
 
-Throws `std::out_of_range` exception.
+// Throws `std::out_of_range` exception.
 */
 ClassifiedChar SourceCursor::next() {
     if (this->isAtEnd()) {
-        Utils::throwException<std::out_of_range>(
-            std::source_location::current(),
-            "cannot get next symbol at @ idx {} | tried {}, max {}: index out of range", 
-            this->idx, this->idx + 1, this->rawtext.size()
-        );
+        return '\0';
     }
     if (this->rawtext[idx] == '\n') {
         this->pos.newLine();
         this->atLineStart = true;
     } else {
         this->pos.nextSymbol();
+        if (this->rawtext[idx + 1]) {
+            
+        }
         this->atLineStart = false;
     }
     idx++;
