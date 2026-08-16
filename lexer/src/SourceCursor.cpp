@@ -88,6 +88,7 @@ Returns current character, then jumps to next.
 */
 ClassifiedChar SourceCursor::next() {
     if (this->isAtEnd()) {
+        idx++;
         return '\0';
     }
     if (this->rawtext[idx] == '\n') {

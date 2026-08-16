@@ -22,7 +22,8 @@ enum class SpecialCharKind {
     Tilde, 
     Caret, 
 
-    EOL
+    EOL, 
+    Eof
 };
 
 using sck = SpecialCharKind;
@@ -45,5 +46,6 @@ inline const std::unordered_map<char, sck> specialCharToKind = {
     {'~', sck::Tilde},
     {'^', sck::Caret},
 
-    {'\n', sck::EOL}
+    {'\n', sck::EOL},
+    {'\0', sck::Eof}
 };

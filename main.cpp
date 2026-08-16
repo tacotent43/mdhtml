@@ -2,8 +2,7 @@
 #include <lexer/Lexer.h>
 
 int main() {
-    // Lexer lexer = Lexer("../hello.md");
-    Lexer lexer = Lexer("hello-1.md"); 
+    Lexer lexer = Lexer("../hello.md");
 
     lexer.tokenize();
 
