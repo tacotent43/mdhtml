@@ -83,12 +83,9 @@ std::string SourceCursor::peekNextN(size_t N) const {
 
 /*
 Returns current character, then jumps to next.
-
-// Throws `std::out_of_range` exception.
 */
 ClassifiedChar SourceCursor::next() {
     if (this->isAtEnd()) {
-        idx++;
         return '\0';
     }
     if (this->rawtext[idx] == '\n') {
@@ -96,10 +93,9 @@ ClassifiedChar SourceCursor::next() {
         this->atLineStart = true;
     } else {
         this->pos.nextSymbol();
-        if (this->rawtext[idx + 1]) {
-            
+        if (!isspace(this->rawtext[idx + 1])) {
+            this->atLineStart = false;
         }
-        this->atLineStart = false;
     }
     idx++;
     return this->rawtext[this->idx - 1];
