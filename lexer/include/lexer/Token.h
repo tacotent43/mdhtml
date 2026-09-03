@@ -14,7 +14,8 @@ struct Token {
     Token() : type(TokenType::Undefined), value(""), position(Position()) {}
     explicit Token(TokenType type, Position position, std::string value = "") : type(type), value(value), position(position) {}
 
-    std::string repr(int indent) const;
+    std::string repr() const;
+    std::string fullRepr() const;
 
     ~Token() = default;
 };

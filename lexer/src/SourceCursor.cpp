@@ -63,7 +63,7 @@ ClassifiedChar SourceCursor::peek(size_t offset) const {
 /*
 Returns next character after current.
 
-Throw `std::out_of_range` exception.
+Throws `std::out_of_range` exception.
 */
 ClassifiedChar SourceCursor::peekNext() const {
     return this->peek(1);

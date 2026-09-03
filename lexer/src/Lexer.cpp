@@ -38,7 +38,7 @@ Token Lexer::nextToken() {
             if (this->source.isOutOfBounds(this->fenceLength)) {
                 // [debug]
                 for (auto token : this->tokens) {
-                    std::cerr << token.repr(0) << '\n';
+                    std::cerr << token.repr() << '\n';
                 }
 
                 Utils::throwException<std::out_of_range>(
@@ -190,6 +190,6 @@ void Lexer::tokenize() {
 
 void Lexer::repr() const {
     for (const Token &token : this->tokens) {
-        std::cerr << token.repr(0) << '\n';
+        std::cerr << token.repr() << '\n';
     }
 }

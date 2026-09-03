@@ -13,6 +13,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(ast)
 add_subdirectory(lexer)
 add_subdirectory(utils)
+add_subdirectory(parser)
 
 add_executable(mdhtml
     main.cpp
@@ -23,4 +24,5 @@ target_link_libraries(mdhtml
         ast
         lexer
         utils
+        parser
 )
