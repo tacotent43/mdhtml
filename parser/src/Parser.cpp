@@ -6,7 +6,6 @@ bool Parser::isAtEnd() const {
            this->tokens[this->idx].type == TokenType::Eof; 
 }
 
-// public
 Token Parser::peek() const {
     if (this->isAtEnd()) {
         Utils::throwException<std::out_of_range>(
@@ -49,4 +48,51 @@ void Parser::expect(TokenType type) {
         );
     }
     this->idx++;
+}
+
+// Block nodes parsing
+std::unique_ptr<ast::BlockNode::Heading> Parser::parseHeading() {
+    
+}
+
+std::unique_ptr<ast::BlockNode::Paragraph> Parser::parseParagraph() {
+
+}
+
+std::unique_ptr<ast::BlockNode::List> Parser::parseList() {
+
+}
+
+std::unique_ptr<ast::BlockNode::ListItem> Parser::parseListItem() {
+
+}
+
+std::unique_ptr<ast::BlockNode::CodeBlock> Parser::parseCodeBlock() {
+
+}
+
+// Inline nodes parsing
+std::unique_ptr<ast::InlineNode::Bold> Parser::parseBold() {
+
+}
+
+std::unique_ptr<ast::InlineNode::Italic> Parser::parseItalic() {
+
+}
+
+std::unique_ptr<ast::InlineNode::Link> Parser::parseLink() {
+
+}
+
+std::unique_ptr<ast::InlineNode::InlineCode> Parser::parseInlineCode() {
+
+}
+
+std::unique_ptr<ast::InlineNode::Text> Parser::parseText() {
+
+}
+
+// public
+std::unique_ptr<ast::BlockNode::Document> Parser::parseDocument {
+
 }
