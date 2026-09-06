@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ast/BlockNode/_BlockNode.h>
 #include <ast/BlockNode/CodeBlock.h>
 #include <ast/BlockNode/Document.h>
 #include <ast/BlockNode/Heading.h>

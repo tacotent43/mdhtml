@@ -17,6 +17,7 @@ class Parser {
     Token next();
 
     bool check(TokenType type) const;
+    void assert(TokenType type) const;
     void expect(TokenType type);
 
     // Block nodes parsing
@@ -26,12 +27,16 @@ class Parser {
     std::unique_ptr<ast::BlockNode::ListItem> parseListItem();
     std::unique_ptr<ast::BlockNode::CodeBlock> parseCodeBlock();
 
+    std::vector<std::unique_ptr<ast::BlockNode::BlockNode>> parseBlockTokens();
+
     // Inline nodes parsing
     std::unique_ptr<ast::InlineNode::Bold> parseBold();
     std::unique_ptr<ast::InlineNode::Italic> parseItalic();
     std::unique_ptr<ast::InlineNode::Link> parseLink();
     std::unique_ptr<ast::InlineNode::InlineCode> parseInlineCode();
     std::unique_ptr<ast::InlineNode::Text> parseText();
+
+    std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> parseInlineTokens()
 
 public:
     std::unique_ptr<ast::BlockNode::Document> parseDocument();
