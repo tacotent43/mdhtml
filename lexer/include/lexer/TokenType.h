@@ -30,6 +30,7 @@ enum class TokenType {
 
     BlankLine,
 
+    Language,
     RawText,
 
     EOL,
@@ -63,6 +64,8 @@ inline const std::unordered_map<TokenType, std::string> tokenTypeStringRepr = {
     {TokenType::Caret, "Caret"},
 
     {TokenType::BlankLine, "BlankLine"},
+
+    {TokenType::Language, "Language"},
     {TokenType::RawText, "RawText"},
 
     {TokenType::EOL, "EOL"},

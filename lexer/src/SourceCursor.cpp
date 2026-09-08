@@ -35,9 +35,18 @@ bool SourceCursor::isOutOfBounds(size_t offset) const {
 }
 
 /* 
-Returns current character
+* Returns current character
+* 
+* Throws std::out_of_range exception
 */
 ClassifiedChar SourceCursor::peek() const {
+    if (this->idx > this->rawtext.size()) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot peek symbol @ {}, max {}: index out of range",
+            this->idx, this->rawtext.size()
+        );
+    }
     return this->rawtext[this->idx];
 }
 

@@ -94,7 +94,11 @@ std::unique_ptr<ast::BlockNode::ListItem> Parser::parseListItem() {
 }
 
 std::unique_ptr<ast::BlockNode::CodeBlock> Parser::parseCodeBlock() {
+    this->expect(TokenType::OpeningCodeSequence);
+    std::string lang = "";
+    std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> children;
 
+    return std::make_unique<ast::BlockNode::CodeBlock>(std::move(children), lang);
 }
 
 // Inline nodes parsing

@@ -28,6 +28,28 @@ Token Lexer::nextToken() {
 
     // Raw-mode for code blocks
     if (this->mode == LexerMode::raw) {
+        std::string lang = "";
+        // code block has strictly specified language
+        if (this->tokens[this->tokens.size() - 1].type == TokenType::OpeningCodeSequence && this->source.peek().classify() != sck::EOL) {
+            Position position = this->source.pos;
+
+            // check if not out of bounds and in while collect symbols 
+            while (this->source.peek().classify() != sck::EOL && this->source.peek().classify() != sck::Eof) {
+                if (this->source.isAtEnd()) {
+                    Utils::throwException<std::out_of_range>(
+                        std::source_location::current(),
+                        "did not found language codefence signature until EOF"
+                    );
+                }
+                lang.push_back(this->source.next());
+            }
+
+            return Token(
+                TokenType::Language,
+                position, lang
+            );
+        }
+
         Token codeblock;
         const std::string closingFence = std::string(this->fenceLength, this->fenceChar);
 
@@ -37,9 +59,9 @@ Token Lexer::nextToken() {
         for (;;) {
             if (this->source.isOutOfBounds(this->fenceLength)) {
                 // [debug]
-                for (auto token : this->tokens) {
-                    std::cerr << token.repr() << '\n';
-                }
+                // for (auto token : this->tokens) {
+                //     std::cerr << token.repr() << '\n';
+                // }
 
                 Utils::throwException<std::out_of_range>(
                     std::source_location::current(),
