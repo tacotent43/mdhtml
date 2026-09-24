@@ -123,10 +123,24 @@ std::unique_ptr<ast::InlineNode::Text> Parser::parseText() {
 }
 
 std::vector<std::unique_ptr<ast::InlineNode::InlineNode>> Parser::parseInlineTokens() {
-    // stops at end token (additional method)
+    switch (this->peek().type) {
+    case TokenType::Asterisk:
+        switch (this->peek().value.size()) {
+        case 1:
+            this->parseItalic();
+            break;
+        case 2:
+            this->parseBold();
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
 }
 
 // public
-std::unique_ptr<ast::BlockNode::Document> Parser::parseDocument {
+std::unique_ptr<ast::BlockNode::Document> Parser::parseDocument() {
 
 }
