@@ -16,9 +16,13 @@ class Parser {
     Token peek() const;
     Token next();
 
-    bool check(TokenType type) const;
+    bool checkCurrentTokenType(TokenType type) const;
+
     void assert(TokenType type) const;
+    void assert(std::pair<TokenType, TokenType> types) const;
+    
     void expect(TokenType type);
+    void expect(std::pair<TokenType, TokenType> types);
 
     // Block nodes parsing
     std::unique_ptr<ast::BlockNode::Heading> parseHeading();

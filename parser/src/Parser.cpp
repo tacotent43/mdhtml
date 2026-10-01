@@ -28,33 +28,91 @@ Token Parser::next() {
     return this->tokens[this->idx++];
 }
 
-bool Parser::check(TokenType type) const {
-    return static_cast<bool>(this->tokens[this->idx].type == type);
+bool Parser::checkCurrentTokenType(TokenType type) const {
+    return static_cast<bool>(this->peek().type == type);
 }
 
 void Parser::assert(TokenType type) const {
-    if (!this->check(type)) {
+    if (this->isAtEnd()) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot move index further @ idx {} | tried {}, max {}: index out of range",
+            this->idx, this->idx + 1, 
+            this->tokens.size()
+        );
+    }
+    if (!this->checkCurrentTokenType(type)) {
         Utils::throwException<std::runtime_error>(
             std::source_location::current(),
             "strictly expected token \"Token::{}\", found \"{}\"",
-            tokenTypeStringRepr.at(type), this->tokens[this->idx].repr()
+            tokenTypeStringRepr.at(type), 
+            this->peek().repr()
+        );
+    }
+}
+
+void Parser::assert(std::pair<TokenType, TokenType> types) const {
+    if (this->isAtEnd()) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot move index further @ idx {} | tried {}, max {}: index out of range",
+            this->idx, this->idx + 1, 
+            this->tokens.size()
+        );
+    }
+    if (
+        !(this->checkCurrentTokenType(types.first) || 
+          this->checkCurrentTokenType(types.second))
+    ) {
+        Utils::throwException<std::runtime_error>(
+            std::source_location::current(),
+            "expected token \"Token::{}\" or \"Token::{}\", found \"{}\"",
+            tokenTypeStringRepr.at(types.first), 
+            tokenTypeStringRepr.at(types.second), 
+            this->peek().repr()
         );
     }
 }
 
 void Parser::expect(TokenType type) {
-    if (this->tokens[this->idx].type != type) {
-        Utils::throwException<std::runtime_error>(
-            std::source_location::current(),
-            "expected token \"Token::{}\", found \"{}\"",
-            tokenTypeStringRepr.at(type), this->tokens[this->idx].repr()
-        );
-    }
     if (this->isAtEnd()) {
         Utils::throwException<std::out_of_range>(
             std::source_location::current(),
             "cannot move index further @ idx {} | tried {}, max {}: index out of range",
-            this->idx, this->idx + 1, this->tokens.size()
+            this->idx, this->idx + 1, 
+            this->tokens.size()
+        );
+    }
+    if (this->checkCurrentTokenType(type)) {
+        Utils::throwException<std::runtime_error>(
+            std::source_location::current(),
+            "expected token with type \"Token::{}\", found \"{}\"",
+            tokenTypeStringRepr.at(type), 
+            this->peek().repr()
+        );
+    }
+    this->idx++;
+}
+
+void Parser::expect(std::pair<TokenType, TokenType> types) {
+    if (this->isAtEnd()) {
+        Utils::throwException<std::out_of_range>(
+            std::source_location::current(),
+            "cannot move index further @ idx {} | tried {}, max {}: index out of range",
+            this->idx, this->idx + 1, 
+            this->tokens.size()
+        );
+    }
+    if (
+        !(this->checkCurrentTokenType(types.first) || 
+        this->checkCurrentTokenType(types.second))
+    ) {
+        Utils::throwException<std::runtime_error>(
+            std::source_location::current(),
+            "expected token with type \"Token::{}\" or \"Token::{}\", found \"{}\"",
+            tokenTypeStringRepr.at(types.first), 
+            tokenTypeStringRepr.at(types.second),
+            this->peek().repr()
         );
     }
     this->idx++;
@@ -79,7 +137,7 @@ std::unique_ptr<ast::BlockNode::Paragraph> Parser::parseParagraph() {
 std::unique_ptr<ast::BlockNode::List> Parser::parseList() {
     std::vector<std::unique_ptr<ast::BlockNode::ListItem>> children;
 
-    while (this->check(TokenType::Hyphen)) {
+    while (this->checkCurrentTokenType(TokenType::Hyphen)) {
         this->next();
         children.push_back(std::move(this->parseListItem()));
     }
@@ -103,7 +161,7 @@ std::unique_ptr<ast::BlockNode::CodeBlock> Parser::parseCodeBlock() {
 
 // Inline nodes parsing
 std::unique_ptr<ast::InlineNode::Bold> Parser::parseBold() {
-
+    this->expect(TokenType::Asterisk);
 }
 
 std::unique_ptr<ast::InlineNode::Italic> Parser::parseItalic() {

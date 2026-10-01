@@ -4,7 +4,7 @@ std::string Token::repr() const {
     return Utils::getFormattedString(
         "Token::{} @ {}l {}s",
         tokenTypeStringRepr.at(this->type),
-        this->position.line, this->position.symbol
+        this->position.line + 1, this->position.symbol + 1
     );
 }
 
@@ -18,7 +18,7 @@ std::string Token::fullRepr() const {
 
     return Utils::getFormattedString(
         "TOKEN @ {}l {}s [\n\tType: {}\n\tValue: {}\n{}]",
-        this->position.line, this->position.symbol, 
+        this->position.line + 1, this->position.symbol + 1, 
         tokenTypeStringRepr.at(this->type),
         shortened    
     );
